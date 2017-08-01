@@ -9777,8 +9777,7 @@ var App = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
     _this.state = {
-      user1: 'this will be null later',
-      user2: 'this will also be null later'
+      users: [{ name: 'Charslot1name', maxhitpoints: 20, attackpower: 5, armor: 2 }, { name: 'Charslot2name', maxhitpoints: 20, attackpower: 5, armor: 2 }]
 
     };
 
@@ -9789,14 +9788,14 @@ var App = function (_React$Component) {
   _createClass(App, [{
     key: 'getAllUserData',
     value: function getAllUserData() {
-      var _this2 = this;
-
       console.log('Client: getAllUserData invoked');
       _axios2.default.get('/users').catch(function (err) {
         console.log('Client: getAllUserData Error: ', err);
       }).then(function (response) {
         console.log('Client: getAllUserData receieved ', response);
-        _this2.setState(response[0]);
+        // this.setState({
+        //   user1: response[0]
+        // })
       });
     }
   }, {
@@ -9818,13 +9817,6 @@ var App = function (_React$Component) {
         ),
         'Something appeared!',
         _react2.default.createElement('br', null),
-        _react2.default.createElement('input', { className: 'nameentry' }),
-        _react2.default.createElement(
-          'button',
-          { type: 'button' },
-          'CLICK HERE'
-        ),
-        _react2.default.createElement('br', null),
         _react2.default.createElement(
           'div',
           null,
@@ -9835,7 +9827,8 @@ var App = function (_React$Component) {
           null,
           this.state.user2
         ),
-        _react2.default.createElement(_status2.default, { user1: this.state.user1, user2: this.state.user2 })
+        _react2.default.createElement(_status2.default, { usernum: this.state.users[0] }),
+        _react2.default.createElement(_status2.default, { usernum: this.state.users[1] })
       );
     }
   }]);
@@ -22500,6 +22493,10 @@ var _react = __webpack_require__(82);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _axios = __webpack_require__(193);
+
+var _axios2 = _interopRequireDefault(_axios);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22517,30 +22514,94 @@ var Status = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Status.__proto__ || Object.getPrototypeOf(Status)).call(this, props));
 
     _this.state = {
-      user1text: 'user1 goes here',
-      user2text: 'user2 goes here'
+      // slotnumber: this.props.number,
+      charLoadedState: false,
+      currentHP: _this.props.usernum.maxhitpoints,
+      nameentrytext: null
+
     };
+
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.handleTextChange = _this.handleTextChange.bind(_this);
     return _this;
   }
 
   _createClass(Status, [{
     key: 'handleSubmit',
-    value: function handleSubmit(entry, content) {
-      console.log('Status: handleSubmit invoked');
+    value: function handleSubmit() {
+      var _this2 = this;
+
+      console.log('Status: handleSubmit invoked for: ', this.state.nameentrytext);
+
+      _axios2.default.get('/users', { name: this.state.nameentrytext }).catch(function (err) {
+        console.log('Status: GetUser Error: ', err);
+      }).then(function (response) {
+        console.log('Status: GetUser receieved ', response);
+        _this2.setState({
+          charLoadedState: true,
+          currentHP: response.maxhitpoints
+        });
+      });
+    }
+  }, {
+    key: 'handleTextChange',
+    value: function handleTextChange(event) {
+      console.log('handleTextChange invoked', event.target.value);
+      console.log('this: ', this);
+      this.setState({
+        nameentrytext: event.target.value
+      });
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      console.log('Status Component mounted for: ', this.props.usernum.name);
     }
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          'h2',
+      if (this.state.charLoadedState) {
+        return _react2.default.createElement(
+          'div',
           null,
-          'Status is here'
-        ),
-        this.props.user1
-      );
+          _react2.default.createElement(
+            'h2',
+            null,
+            this.props.usernum.name
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            'HP: ' + this.state.currentHP
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            'Attack: ' + this.props.usernum.attackpower
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            'Armor: ' + this.props.usernum.armor
+          )
+        );
+      } else {
+        return _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'h2',
+            null,
+            'Enter Name'
+          ),
+          _react2.default.createElement('input', { className: 'nameentry', onChange: this.handleTextChange }),
+          _react2.default.createElement(
+            'button',
+            { type: 'button', onClick: this.handleSubmit },
+            'Find or Create'
+          )
+        );
+      }
     }
   }]);
 
