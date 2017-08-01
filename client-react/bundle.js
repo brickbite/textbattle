@@ -10594,6 +10594,9 @@ var App = function (_React$Component) {
       // console.log('scriptchar2', scriptchar2)
       // console.log('scriptchar1', scriptchar1)
 
+
+      console.log('intervalIDs: ', Interval1ID, Interval2ID);
+
       var checkHealth = function checkHealth() {
         if (updatechar1.maxhitpoints <= 0 || updatechar2.maxhitpoints <= 0) {
           clearInterval(Interval1ID);
@@ -10610,9 +10613,6 @@ var App = function (_React$Component) {
           });
         }
       };
-
-      var Interval1ID = setInterval(char1attack, updatechar1.attackrate);
-      var Interval2ID = setInterval(char2attack, updatechar2.attackrate);
 
       var char1attack = function char1attack() {
         updatechar2.maxhitpoints = updatechar2.maxhitpoints - updatechar1.attackpower - updatechar2.armor;
@@ -10636,10 +10636,8 @@ var App = function (_React$Component) {
         });
       };
 
-      // while (this.state.char1Data.maxhitpoints > 0 && this.state.char2Data.maxhitpoints > 0) {
-      setInterval(char1attack, updatechar1.attackrate);
-      setInterval(char2attack, updatechar2.attackrate);
-      // }
+      var Interval1ID = setInterval(char1attack, updatechar1.attackrate);
+      var Interval2ID = setInterval(char2attack, updatechar2.attackrate);
     }
   }, {
     key: 'render',

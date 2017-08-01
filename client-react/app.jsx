@@ -121,6 +121,12 @@ class App extends React.Component {
     // console.log('scriptchar2', scriptchar2)
     // console.log('scriptchar1', scriptchar1)
 
+
+
+    console.log('intervalIDs: ', Interval1ID, Interval2ID)
+
+
+
     let checkHealth = function () {
       if (updatechar1.maxhitpoints <= 0 || updatechar2.maxhitpoints <= 0) {
         clearInterval(Interval1ID);
@@ -139,8 +145,6 @@ class App extends React.Component {
     }
 
 
-    let Interval1ID = setInterval(char1attack, updatechar1.attackrate);
-    let Interval2ID = setInterval(char2attack, updatechar2.attackrate);
 
     let char1attack = function () {
       updatechar2.maxhitpoints = updatechar2.maxhitpoints - updatechar1.attackpower - updatechar2.armor;
@@ -164,10 +168,8 @@ class App extends React.Component {
       })
     }
 
-    // while (this.state.char1Data.maxhitpoints > 0 && this.state.char2Data.maxhitpoints > 0) {
-      setInterval( char1attack, updatechar1.attackrate)
-      setInterval( char2attack, updatechar2.attackrate)
-    // }
+    const Interval1ID = setInterval(char1attack, updatechar1.attackrate);
+    const Interval2ID = setInterval(char2attack, updatechar2.attackrate);
 
   }
 
