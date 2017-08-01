@@ -207,8 +207,8 @@ class App extends React.Component {
 
     return (
       <div>
-        <h1>Title Text</h1>
-        Something appeared!
+        <h1>Text Battle</h1>
+        Select Characters to Start
         <br></br>
         <Create />
         <Status usernum={this.state.usernumlist[0]} 

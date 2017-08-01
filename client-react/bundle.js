@@ -10677,9 +10677,9 @@ var App = function (_React$Component) {
         _react2.default.createElement(
           'h1',
           null,
-          'Title Text'
+          'Text Battle'
         ),
-        'Something appeared!',
+        'Select Characters to Start',
         _react2.default.createElement('br', null),
         _react2.default.createElement(_create2.default, null),
         _react2.default.createElement(_status2.default, { usernum: this.state.usernumlist[0],
@@ -24618,7 +24618,7 @@ var List = function (_React$Component) {
 
     _this.state = {
       readyState: false,
-      log: [1, 2, 3, 4, 5, 6]
+      log: ['6..', '5..', '4...', '3....', '2.....', '1......']
 
       // this.handllogeSubmit = this.handleSubmit.bind(this);
       // this.handleTextChange = this.handleTextChange.bind(this);
