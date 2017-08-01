@@ -1,13 +1,13 @@
 const express = require('express');
-const Sequelize = require('sequelize');
 const parser = require('body-parser');
+const db = require('./database/db.js');
 
 app = express();
 
 app.use(parser.urlencoded({extended: true}));
 app.use(parser.json());
 
-app.use(express.static(__dirname + '/client'));
+app.use(express.static(__dirname + '/client-react'));
 
 let port = false || 3000;
 

@@ -1,0 +1,16 @@
+[{
+  "name": "Skeleton",
+  "hitpoints": 25,
+  "attackpower": 4,
+  "armor": 0
+}, {
+  "name": "Golem",
+  "hitpoints": 250,
+  "attackpower": 10,
+  "armor": 3
+}, {
+  "name": "Minionling",
+  "hitpoints": 35,
+  "attackpower": 5,
+  "armor": 0
+}]
