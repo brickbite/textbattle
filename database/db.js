@@ -59,5 +59,17 @@ db.authenticate()
 
   );
 
+const searchUser = function(enteredName) {
+
+  users.find({name: enteredName})
+    .then((result) => {
+      console.log('database query result:', result.data);
+      return result;
+    })
+    .catch(err => { console.log('Error:', err); });
+}
+
+
 module.exports.db = db;
 module.exports.users = users;
+module.exports.searchUser = searchUser;

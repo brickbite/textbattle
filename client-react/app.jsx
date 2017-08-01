@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Status from './components/status.jsx';
 // import List from './components/list.jsx';
+import axios from 'axios';
 
 class App extends React.Component {
   constructor(props) {
@@ -9,13 +10,24 @@ class App extends React.Component {
     this.state = {
       user1: 'this will be null later',
       user2: 'this will also be null later',
-
+      
     }
 
+    this.getAllUserData.bind(this);
   }
 
-  
+  getAllUserData() {
+    console.log('Client: getAllUserData invoked');
+    axios.get('/users')
+      .then()
+      .catch();
+  }
 
+
+  componentDidMount() {
+    console.log('Client: mounted.');
+    this.getAllUserData();
+  }
 
   render () {
     return (
