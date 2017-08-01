@@ -10488,13 +10488,15 @@ var App = function (_React$Component) {
       char2Data: null,
       char1Loaded: false,
       char2Loaded: false,
-      inConflict: false
+      inConflict: false,
+      list: []
 
     };
 
     _this.getUserData = _this.getUserData.bind(_this);
     _this.resetLoadedState = _this.resetLoadedState.bind(_this);
     _this.render = _this.render.bind(_this);
+    _this.startConflict = _this.startConflict.bind(_this);
     return _this;
   }
 
@@ -10514,15 +10516,17 @@ var App = function (_React$Component) {
           });
         }).then(function (response) {
           console.log('Client: GetUser receieved ', response.data[0]);
-          _this2.setState({
-            char1Loaded: true,
-            char1Data: response.data[0]
-            // currentHP: response.data[0].maxhitpoints,
-            // charName: response.data[0].name,
-            // charAtk: response.data[0].attackpower,
-            // charArmor: response.data[0].armor,
-            // charAtkRate: response.data[0].attackrate,
-          });
+          if (response.data[0] === undefined) {
+            _this2.setState({
+              char1Loaded: false,
+              char1Data: null
+            });
+          } else {
+            _this2.setState({
+              char1Loaded: true,
+              char1Data: response.data[0]
+            });
+          }
         });
       } else if (slot === 1) {
         _axios2.default.get('/users', { params: { name: request } }).catch(function (err) {
@@ -10532,15 +10536,17 @@ var App = function (_React$Component) {
           });
         }).then(function (response) {
           console.log('Client: GetUser receieved ', response.data[0]);
-          _this2.setState({
-            char2Loaded: true,
-            char2Data: response.data[0]
-            // charName: response.data[0].name,
-            // charAtk: response.data[0].attackpower,
-            // charArmor: response.data[0].armor,
-            // charAtkRate: response.data[0].attackrate,
-          });
-          console.log('Client: char2loaded:', _this2.state.char2Loaded);
+          if (response.data[0] === undefined) {
+            _this2.setState({
+              char2Loaded: false,
+              char2Data: null
+            });
+          } else {
+            _this2.setState({
+              char2Loaded: true,
+              char2Data: response.data[0]
+            });
+          }
         });
       }
     }
@@ -10563,6 +10569,45 @@ var App = function (_React$Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       console.log('Client: mounted.');
+    }
+  }, {
+    key: 'startConflict',
+    value: function startConflict() {
+      var _this3 = this;
+
+      console.log('Client: startConflict invoked');
+
+      var updatechar1 = this.state.char1Data;
+      var updatechar2 = this.state.char2Data;
+
+      var log = [];
+      var scriptchar2 = updatechar2.name + ' attacks!';
+      var scriptchar1 = updatechar1.name + ' attacks!';
+
+      console.log('updatechar1', updatechar1);
+      console.log('updatechar2', updatechar2);
+      console.log('log', log);
+      console.log('scriptchar2', scriptchar2);
+      console.log('scriptchar1', scriptchar1);
+
+      // while (this.state.char1Data.maxhitpoints > 0 && this.state.char2Data.maxhitpoints > 0) {
+      setInterval(function () {
+        updatechar2.maxhitpoints = updatechar2.maxhitpoints - updatechar1.attackpower - updatechar2.armor;
+        log.push(scriptchar1);
+        _this3.setState({
+          char2Data: updatechar2,
+          list: log
+        });
+      }, updatechar1.attackrate);
+      setInterval(function () {
+        updatechar1.maxhitpoints = updatechar1.maxhitpoints - updatechar2.attackpower - updatechar1.armor;
+        log.push(scriptchar2);
+        _this3.setState({
+          char1Data: updatechar1,
+          list: log
+        });
+      }, updatechar2.attackrate);
+      // }
     }
   }, {
     key: 'render',
@@ -10609,35 +10654,30 @@ var App = function (_React$Component) {
         _react2.default.createElement(_create2.default, null),
         _react2.default.createElement(_status2.default, { usernum: this.state.usernumlist[0],
           userdataname: char1name,
-
           userdatahp: char1hp,
-
           userdataatk: char1atkpwr,
-
           userdataarmor: char1armor,
-
           userdataatkrate: char1atkrate,
-
           getmethod: this.getUserData,
           resetstatusmethod: this.resetLoadedState,
           slotnum: this.state.userSlotList[0],
           loaded: this.state.char1Loaded }),
         _react2.default.createElement(_status2.default, { usernum: this.state.usernumlist[1],
           userdataname: char2name,
-
           userdatahp: char2hp,
-
           userdataatk: char2atkpwr,
-
           userdataarmor: char2armor,
-
           userdataatkrate: char2atkrate,
-
           getmethod: this.getUserData,
           resetstatusmethod: this.resetLoadedState,
           slotnum: this.state.userSlotList[1],
           loaded: this.state.char2Loaded }),
-        _react2.default.createElement(_list2.default, null)
+        _react2.default.createElement(_list2.default, { ready: this.state.char1Loaded && this.state.char2Loaded,
+          user1: this.state.char1Data,
+          user2: this.state.char2Data,
+          record: this.state.list,
+          startconflictmethod: this.startConflict
+        })
       );
     }
   }]);
@@ -24546,12 +24586,15 @@ var List = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (List.__proto__ || Object.getPrototypeOf(List)).call(this, props));
 
     _this.state = {
+      readyState: false,
       log: [1, 2, 3, 4, 5, 6]
 
       // this.handllogeSubmit = this.handleSubmit.bind(this);
       // this.handleTextChange = this.handleTextChange.bind(this);
       // this.resetState = this.resetState.bind(this);
-    };return _this;
+    };_this.handleClick = _this.handleClick.bind(_this);
+    _this.resetLog = _this.resetLog.bind(_this);
+    return _this;
   }
 
   _createClass(List, [{
@@ -24561,7 +24604,18 @@ var List = function (_React$Component) {
 
       this.setState({
         // slotnumber: this.props.number,
+        readyState: false,
         log: []
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextprops) {
+      console.log('List: compWillReceiveProps:', nextprops);
+      this.setState({
+        // slotnumber: this.props.number,
+        readyState: nextprops.ready,
+        log: nextprops.record
       });
     }
   }, {
@@ -24571,24 +24625,55 @@ var List = function (_React$Component) {
       console.log(this.state.log);
     }
   }, {
+    key: 'handleClick',
+    value: function handleClick() {
+      console.log('List: startConflict invoked');
+      console.log(this);
+      this.props.startconflictmethod();
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          'h2',
+      if (this.state.readyState) {
+        return _react2.default.createElement(
+          'div',
           null,
-          'List Goes Here'
-        ),
-        this.state.log.map(function (entry) {
-          return _react2.default.createElement(
-            'div',
-            { key: entry },
-            entry
-          );
-        })
-      );
+          _react2.default.createElement(
+            'h2',
+            null,
+            'List Goes Here'
+          ),
+          _react2.default.createElement(
+            'button',
+            { type: 'button', onClick: this.handleClick },
+            'START'
+          ),
+          this.state.log.map(function (entry) {
+            return _react2.default.createElement(
+              'div',
+              { key: entry },
+              entry
+            );
+          })
+        );
+      } else {
+        return _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'h2',
+            null,
+            'List Goes Here'
+          ),
+          this.state.log.map(function (entry) {
+            return _react2.default.createElement(
+              'div',
+              { key: entry },
+              entry
+            );
+          })
+        );
+      }
     }
   }]);
 

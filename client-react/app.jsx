@@ -16,13 +16,15 @@ class App extends React.Component {
       char2Data: null,
       char1Loaded: false,
       char2Loaded: false,
-      inConflict: false
-      
+      inConflict: false,
+      list: []
+
     }
 
     this.getUserData = this.getUserData.bind(this);
     this.resetLoadedState = this.resetLoadedState.bind(this);
     this.render = this.render.bind(this);
+    this.startConflict = this.startConflict.bind(this);
   }
 
   getUserData(request, slot) {
@@ -39,15 +41,16 @@ class App extends React.Component {
         })
         .then( (response) => {
           console.log('Client: GetUser receieved ', response.data[0]);
+          if (response.data[0] === undefined) {
+            this.setState({
+            char1Loaded: false,
+            char1Data: null
+          })
+          } else {
           this.setState({
             char1Loaded: true,
             char1Data: response.data[0]
-            // currentHP: response.data[0].maxhitpoints,
-            // charName: response.data[0].name,
-            // charAtk: response.data[0].attackpower,
-            // charArmor: response.data[0].armor,
-            // charAtkRate: response.data[0].attackrate,
-          })
+          })}
         } )
     } else if (slot === 1) {
       axios.get('/users', {params: {name: request}})
@@ -59,15 +62,16 @@ class App extends React.Component {
         })
         .then( (response) => {
           console.log('Client: GetUser receieved ', response.data[0]);
+          if (response.data[0] === undefined) {
+            this.setState({
+            char2Loaded: false,
+            char2Data: null
+          })
+          } else {
           this.setState({
             char2Loaded: true,
-            char2Data: response.data[0],
-            // charName: response.data[0].name,
-            // charAtk: response.data[0].attackpower,
-            // charArmor: response.data[0].armor,
-            // charAtkRate: response.data[0].attackrate,
-          })
-          console.log('Client: char2loaded:', this.state.char2Loaded);
+            char2Data: response.data[0]
+          })}
         } )
 
     }
@@ -95,7 +99,41 @@ class App extends React.Component {
   }
 
 
+  startConflict() {
+    console.log('Client: startConflict invoked');
 
+    let updatechar1 = this.state.char1Data
+    let updatechar2 = this.state.char2Data
+
+    let log = []
+    let scriptchar2 = updatechar2.name + ' attacks!'
+    let scriptchar1 = updatechar1.name + ' attacks!'
+
+    console.log('updatechar1', updatechar1)
+    console.log('updatechar2', updatechar2)
+    console.log('log', log)
+    console.log('scriptchar2', scriptchar2)
+    console.log('scriptchar1', scriptchar1)
+
+    // while (this.state.char1Data.maxhitpoints > 0 && this.state.char2Data.maxhitpoints > 0) {
+      setInterval( () => {
+          updatechar2.maxhitpoints = updatechar2.maxhitpoints - updatechar1.attackpower - updatechar2.armor;
+          log.push(scriptchar1);
+          this.setState({
+            char2Data: updatechar2,
+            list: log
+          })
+        }, updatechar1.attackrate)
+      setInterval( () => {
+          updatechar1.maxhitpoints = updatechar1.maxhitpoints - updatechar2.attackpower - updatechar1.armor
+          log.push(scriptchar2);
+          this.setState({
+            char1Data: updatechar1,
+            list: log
+          })
+        }, updatechar2.attackrate)
+    // }
+  }
 
 
   render () {
@@ -137,35 +175,30 @@ class App extends React.Component {
         <Create />
         <Status usernum={this.state.usernumlist[0]} 
         userdataname={ char1name } 
-
         userdatahp={ char1hp } 
-
         userdataatk={ char1atkpwr } 
-
         userdataarmor={ char1armor } 
-
         userdataatkrate={ char1atkrate } 
-
         getmethod={this.getUserData} 
         resetstatusmethod={this.resetLoadedState} 
         slotnum={this.state.userSlotList[0]} 
         loaded={this.state.char1Loaded} />
         <Status usernum={this.state.usernumlist[1]} 
         userdataname={ char2name } 
-
         userdatahp={ char2hp } 
-
         userdataatk={ char2atkpwr } 
-
         userdataarmor={ char2armor } 
-
         userdataatkrate={ char2atkrate } 
-
         getmethod={this.getUserData} 
         resetstatusmethod={this.resetLoadedState} 
         slotnum={this.state.userSlotList[1]} 
         loaded={this.state.char2Loaded} />
-        <List />
+        <List ready={this.state.char1Loaded && this.state.char2Loaded} 
+        user1={this.state.char1Data}
+        user2={this.state.char2Data}
+        record={this.state.list}
+        startconflictmethod={this.startConflict}
+        />
       </div>
     )
   }

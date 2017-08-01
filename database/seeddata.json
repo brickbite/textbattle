@@ -22,4 +22,10 @@
   "attackpower": 5,
   "armor": 0,
   "attackrate": 1680
+}, {
+  "name": "Bear",
+  "maxhitpoints": 60,
+  "attackpower": 7,
+  "armor": 0,
+  "attackrate": 3000
 }]
