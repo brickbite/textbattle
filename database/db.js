@@ -60,16 +60,32 @@ db.authenticate()
   );
 
 const searchUser = function(enteredName, cb) {
-  console.log('DB: searchUser: invoked for', enteredName)
+  console.log('DB: searchUser: invoked for', enteredName);
   users.findAll({where: {name: enteredName}})
+    .catch(err => { console.log('Error in searchUser:', err); })
     .then((result) => {
       console.log('database query result:', result);
       cb(null, result);
-    })
-    .catch(err => { console.log('Error:', err); });
+    });
+}
+
+const insertUser = function(enteredName, cb) {
+  console.log('DB: insertUser: invoked for', enteredName);
+  users.create({
+    name: enteredName,
+    hitpoints: 900,
+    attackpower: 14,
+    armor: 2
+  })
+    .catch(err => { console.log('Error in insertUser:', err); })
+    .then((result) => {
+      console.log('database insert:', result);
+      cb(null, result);
+    });
 }
 
 
 module.exports.db = db;
 module.exports.users = users;
 module.exports.searchUser = searchUser;
+module.exports.insertUser = insertUser;
