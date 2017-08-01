@@ -9789,11 +9789,14 @@ var App = function (_React$Component) {
   _createClass(App, [{
     key: 'getAllUserData',
     value: function getAllUserData() {
+      var _this2 = this;
+
       console.log('Client: getAllUserData invoked');
-      _axios2.default.get('/users').then(function (response) {
-        console.log('Client: getAllUserData receieved ', response);
-      }).catch(function (err) {
+      _axios2.default.get('/users').catch(function (err) {
         console.log('Client: getAllUserData Error: ', err);
+      }).then(function (response) {
+        console.log('Client: getAllUserData receieved ', response);
+        _this2.setState(response[0]);
       });
     }
   }, {
