@@ -13,10 +13,14 @@ app.use(express.static(__dirname + '/client-react'));
 
 app.get('/users', function(req, res) {
   console.log('Server: receievd a get to /users')
-  console.log('Server: req.body:', req.body);
-  db.searchUser(req.body)
-    .then( (result) => {res.status(200).send(result) })
-    .catch( err => {console.log('Server: GET:', err)});
+  // console.log('Server: req.body:', req.body);
+  // console.log('Server: req.params:', req.params);
+  console.log('Server: req.query:', req.query);
+  db.searchUser(req.query.name);
+    // .then( (result) => {res.status(200).send(result) })
+    // .catch( err => {console.log('Server: GET:', err)});
+  // res.status(200).send('ok');
+  res.status(200).send('ok');
 })
 
 

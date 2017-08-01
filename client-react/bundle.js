@@ -9790,7 +9790,11 @@ var App = function (_React$Component) {
     key: 'getAllUserData',
     value: function getAllUserData() {
       console.log('Client: getAllUserData invoked');
-      _axios2.default.get('/users').then().catch();
+      _axios2.default.get('/users').then(function (response) {
+        console.log('Client: getAllUserData receieved ', response);
+      }).catch(function (err) {
+        console.log('Client: getAllUserData Error: ', err);
+      });
     }
   }, {
     key: 'componentDidMount',

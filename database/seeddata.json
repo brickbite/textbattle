@@ -1,5 +1,10 @@
 [{
-  "name": "Skeleton",
+  "name": "Skeleton1",
+  "hitpoints": 25,
+  "attackpower": 4,
+  "armor": 0
+}, {
+  "name": "Skeleton2",
   "hitpoints": 25,
   "attackpower": 4,
   "armor": 0

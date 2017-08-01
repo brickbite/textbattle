@@ -19,8 +19,8 @@ class App extends React.Component {
   getAllUserData() {
     console.log('Client: getAllUserData invoked');
     axios.get('/users')
-      .then()
-      .catch();
+      .then( (response) => { console.log('Client: getAllUserData receieved ', response) } )
+      .catch( err => {console.log('Client: getAllUserData Error: ', err ) });
   }
 
 

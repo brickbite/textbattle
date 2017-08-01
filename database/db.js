@@ -30,7 +30,7 @@ db.authenticate()
   }).then(
 
 // removed { force: true } from within .sync. was causing errors.
-    users.sync({ force: true }).then(dataToSeed.map(dataEntry => {
+    users.sync().then(dataToSeed.map(dataEntry => {
       console.log('dataEntry in .map:', dataEntry);
       return users.create({
           name: dataEntry.name,
@@ -60,10 +60,10 @@ db.authenticate()
   );
 
 const searchUser = function(enteredName) {
-
-  users.find({name: enteredName})
+  console.log('DB: searchUser: invoked for', enteredName)
+  users.findAll({where: {name: enteredName}})
     .then((result) => {
-      console.log('database query result:', result.data);
+      console.log('database query result:', result);
       return result;
     })
     .catch(err => { console.log('Error:', err); });
