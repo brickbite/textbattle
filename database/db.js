@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const dataToSeed = require('./seeddata.json')
-console.log('Data to Seed: ', dataToSeed);
+// console.log('Data to Seed: ', dataToSeed);
 
 const db = new Sequelize ('database', 'username', 'password', {
   host: 'localhost',

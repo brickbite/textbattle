@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Status from './components/status.jsx';
+// import List from './components/list.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      something: 'something one',
-      something2: 'something two'
+      user1: 'this will be null later',
+      user2: 'this will also be null later',
+
     }
+
   }
+
+  
+
 
   render () {
     return (
@@ -19,8 +26,9 @@ class App extends React.Component {
         <input className="nameentry"/>
         <button type="button">CLICK HERE</button>
         <br></br>
-        <div>{this.state.something}</div>
-        <div>{this.state.something2}</div>
+        <div>{this.state.user1}</div>
+        <div>{this.state.user2}</div>
+        <Status user1={this.state.user1} user2={this.state.user2} />
       </div>
     )
   }
