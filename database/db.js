@@ -59,12 +59,12 @@ db.authenticate()
 
   );
 
-const searchUser = function(enteredName) {
+const searchUser = function(enteredName, cb) {
   console.log('DB: searchUser: invoked for', enteredName)
   users.findAll({where: {name: enteredName}})
     .then((result) => {
       console.log('database query result:', result);
-      return result;
+      cb(null, result);
     })
     .catch(err => { console.log('Error:', err); });
 }
