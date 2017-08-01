@@ -101,38 +101,74 @@ class App extends React.Component {
 
   startConflict() {
     console.log('Client: startConflict invoked');
+    const context = this;
+
+    this.setState({
+      inConflict: true
+    })
 
     let updatechar1 = this.state.char1Data
     let updatechar2 = this.state.char2Data
 
     let log = []
+    let counter = 1;
     let scriptchar2 = updatechar2.name + ' attacks!'
     let scriptchar1 = updatechar1.name + ' attacks!'
 
-    console.log('updatechar1', updatechar1)
-    console.log('updatechar2', updatechar2)
-    console.log('log', log)
-    console.log('scriptchar2', scriptchar2)
-    console.log('scriptchar1', scriptchar1)
+    // console.log('updatechar1', updatechar1)
+    // console.log('updatechar2', updatechar2)
+    // console.log('log', log)
+    // console.log('scriptchar2', scriptchar2)
+    // console.log('scriptchar1', scriptchar1)
+
+    let checkHealth = function () {
+      if (updatechar1.maxhitpoints <= 0 || updatechar2.maxhitpoints <= 0) {
+        clearInterval(Interval1ID);
+        clearInterval(Interval2ID);
+        if (updatechar1.maxhitpoints > 0) {
+          log.push(updatechar1.name + ' wins!');
+        }
+        if (updatechar2.maxhitpoints > 0) {
+          log.push(updatechar2.name + ' wins!');
+        }
+        context.setState({
+          inConflict: false,
+          list: log
+        })
+      }
+    }
+
+
+    let Interval1ID = setInterval(char1attack, updatechar1.attackrate);
+    let Interval2ID = setInterval(char2attack, updatechar2.attackrate);
+
+    let char1attack = function () {
+      updatechar2.maxhitpoints = updatechar2.maxhitpoints - updatechar1.attackpower - updatechar2.armor;
+      log.push(counter + ': ' + scriptchar1);
+      counter++;
+      checkHealth();
+      context.setState({
+        char2Data: updatechar2,
+        list: log
+      })
+    }
+
+    let char2attack = function () {
+      updatechar1.maxhitpoints = updatechar1.maxhitpoints - updatechar2.attackpower - updatechar1.armor
+      log.push(counter + ': ' + scriptchar2);
+      counter++;
+      checkHealth();
+      context.setState({
+        char1Data: updatechar1,
+        list: log
+      })
+    }
 
     // while (this.state.char1Data.maxhitpoints > 0 && this.state.char2Data.maxhitpoints > 0) {
-      setInterval( () => {
-          updatechar2.maxhitpoints = updatechar2.maxhitpoints - updatechar1.attackpower - updatechar2.armor;
-          log.push(scriptchar1);
-          this.setState({
-            char2Data: updatechar2,
-            list: log
-          })
-        }, updatechar1.attackrate)
-      setInterval( () => {
-          updatechar1.maxhitpoints = updatechar1.maxhitpoints - updatechar2.attackpower - updatechar1.armor
-          log.push(scriptchar2);
-          this.setState({
-            char1Data: updatechar1,
-            list: log
-          })
-        }, updatechar2.attackrate)
+      setInterval( char1attack, updatechar1.attackrate)
+      setInterval( char2attack, updatechar2.attackrate)
     // }
+
   }
 
 
@@ -198,6 +234,7 @@ class App extends React.Component {
         user2={this.state.char2Data}
         record={this.state.list}
         startconflictmethod={this.startConflict}
+        inconflictstate={this.state.inConflict}
         />
       </div>
     )
