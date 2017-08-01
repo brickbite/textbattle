@@ -20,7 +20,8 @@ app.get('/users', function(req, res) {
   db.searchUser(req.query.name, (err, result) => {
     // console.log('Server: database query result:', result);
     if (err) { err => (console.log('Server: err in querying db:', err))} // need to do error handling in terms of a response to client
-    else { res.status(200).send(result); }
+    else { console.log('Server: query from DB result:', result);
+      res.send(result); }
   });
 
 })
@@ -33,7 +34,8 @@ app.post('/users', function(req, res) {
   db.insertUser(req.query.name, (err, result) => {
     // console.log('Server: database query result:', result);
     if (err) { err => (console.log('Server: err in inserting to db:', err))} // need to do error handling in terms of a response to client
-    else { res.status(201).send(result); }
+    else { console.log('Server: insert to DB result:', result);
+      res.status(201).send(result); }
   });
 })
 

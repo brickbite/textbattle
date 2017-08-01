@@ -2,20 +2,24 @@
   "name": "Skeleton1",
   "maxhitpoints": 25,
   "attackpower": 4,
-  "armor": 0
+  "armor": 0,
+  "attackrate": 2400
 }, {
   "name": "Skeleton2",
   "maxhitpoints": 25,
   "attackpower": 4,
-  "armor": 0
+  "armor": 0,
+  "attackrate": 2500
 }, {
   "name": "Golem",
-  "maxhitpoints": 250,
+  "maxhitpoints": 160,
   "attackpower": 10,
-  "armor": 3
+  "armor": 3,
+  "attackrate": 7000
 }, {
   "name": "Minionling",
   "maxhitpoints": 35,
   "attackpower": 5,
-  "armor": 0
+  "armor": 0,
+  "attackrate": 1680
 }]

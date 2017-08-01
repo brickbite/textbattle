@@ -16,9 +16,10 @@ const db = new Sequelize ('database', 'username', 'password', {
 
 const users = db.define('users', {
   name: { type: Sequelize.TEXT, unique: true},
-  hitpoints: { type: Sequelize.INTEGER },
+  maxhitpoints: { type: Sequelize.INTEGER },
   attackpower: { type: Sequelize.INTEGER },
   armor: { type: Sequelize.INTEGER },
+  attackrate: { type: Sequelize.INTEGER }
 })
 
 db.authenticate()
@@ -34,9 +35,10 @@ db.authenticate()
       console.log('dataEntry in .map:', dataEntry);
       return users.create({
           name: dataEntry.name,
-          hitpoints: dataEntry.hitpoints,
+          maxhitpoints: dataEntry.maxhitpoints,
           attackpower: dataEntry.attackpower,
-          armor: dataEntry.armor
+          armor: dataEntry.armor,
+          attackrate: dataEntry.attackrate
         }).catch((error) => {
           console.log('already exists!')})
     }))
@@ -64,7 +66,7 @@ const searchUser = function(enteredName, cb) {
   users.findAll({where: {name: enteredName}})
     .catch(err => { console.log('Error in searchUser:', err); })
     .then((result) => {
-      console.log('database query result:', result);
+      console.log('DB: query result:', result);
       cb(null, result);
     });
 }
@@ -73,13 +75,14 @@ const insertUser = function(enteredName, cb) {
   console.log('DB: insertUser: invoked for', enteredName);
   users.create({
     name: enteredName,
-    hitpoints: 900,
+    maxhitpoints: 900,
     attackpower: 14,
-    armor: 2
+    armor: 2,
+    attackrate: 8000
   })
     .catch(err => { console.log('Error in insertUser:', err); })
     .then((result) => {
-      console.log('database insert:', result);
+      console.log('DB: insert:', result);
       cb(null, result);
     });
 }

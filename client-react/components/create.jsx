@@ -1,13 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 
-class Status extends React.Component {
+class Create extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       // slotnumber: this.props.number,
-      charLoadedState: false,
-      failedSearch: false,
+      formLoadedState: false,
+      failedCreate: false,
       currentHP: null,
       charName: null,
       charAtk: null,
@@ -28,8 +28,8 @@ class Status extends React.Component {
 
    this.setState({
       // slotnumber: this.props.number,
-      charLoadedState: false,
-      failedSearch: false,
+      formLoadedState: false,
+      failedCreate: false,
       currentHP: null,
       charName: null,
       charAtk: null,
@@ -41,17 +41,17 @@ class Status extends React.Component {
 
 
   handleSubmit() {
-    console.log('Status: handleSubmit invoked for: ', this.state.nameentrytext);
+    console.log('Create: handleSubmit invoked for: ', this.state.nameentrytext);
 
-    axios.get('/users', {params: {name: this.state.nameentrytext}})
+    axios.post('/users', {params: {name: this.state.nameentrytext}})
       .catch( err => {
-        console.log('Status: GetUser Error: ', err );
+        console.log('Create: createUser Error: ', err );
         this.setState({
-          charLoadedState: false
+          failedCreate: true
         });
       })
       .then( (response) => {
-        console.log('Status: GetUser receieved ', response.data[0]);
+        console.log('Create: createUser receieved ', response.data[0]);
         this.setState({
           charLoadedState: true,
           currentHP: response.data[0].maxhitpoints,
@@ -63,7 +63,7 @@ class Status extends React.Component {
       } )
   }
 
-  handleTextChange(event) {
+  handleTextChange(event, field) {
     // console.log('handleTextChange invoked', event.target.value);
     // console.log('this: ', this);
     this.setState({
@@ -72,30 +72,29 @@ class Status extends React.Component {
   }
 
   componentDidMount() {
-    console.log('Status Component mounted for: ', this.props.usernum.name);
+    console.log('Create Component mounted');
   }
 
 
 
   render() {
-    if (this.state.charLoadedState) {
+    if (this.state.formLoadedState) {
       return (
         <div>
-          <h2>{this.props.usernum.name}</h2>
-          <h3>{'Name: ' + this.state.charName}</h3>
-          <div>{'HP: ' + this.state.currentHP}</div>
-          <div>{'Attack: ' + this.state.charAtk}</div>
-          <div>{'Armor: ' + this.state.charArmor}</div>
-          <div>{'AttackRate: ' + this.state.charAtkRate}</div>
+          <form action="/action_page.php" method="get">
+            First name: <input type="text" name="fname"> </input><br></br>
+            Last name: <input type="text" name="lname"> </input><br></br>
+            Last name: <input type="text" name="lname"> </input><br></br>
+            Last name: <input type="text" name="lname"> </input><br></br>
+            <input type="submit" value="Submit"> </input>
+          </form>
           <button type="button" onClick={this.resetState}>Go Back</button>
         </div>
       )
     } else {
       return (
         <div>
-          <h2>Enter Name</h2>
-          <input className="nameentry" onChange={this.handleTextChange} />
-          <button type="button" onClick={this.handleSubmit}>Find Character</button>
+          <button type="button" onClick={this.handleSubmit}>Create Character</button>
         </div>
       )
     }
@@ -105,4 +104,4 @@ class Status extends React.Component {
 
 }
 
-export default Status
+export default Create;
