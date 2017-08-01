@@ -10435,6 +10435,10 @@ module.exports = Cancel;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(25);
@@ -10478,36 +10482,120 @@ var App = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
     _this.state = {
-      users: [{ name: 'CharSlot1', maxhitpoints: 20, attackpower: 5, armor: 2 }, { name: 'CharSlot2', maxhitpoints: 20, attackpower: 5, armor: 2 }]
+      usernumlist: ['Character 1', 'Character 2'],
+      userSlotList: [0, 1],
+      char1Data: null,
+      char2Data: null,
+      char1Loaded: false,
+      char2Loaded: false,
+      inConflict: false
 
     };
 
-    _this.getAllUserData.bind(_this);
+    _this.getUserData = _this.getUserData.bind(_this);
+    _this.resetLoadedState = _this.resetLoadedState.bind(_this);
+    _this.render = _this.render.bind(_this);
     return _this;
   }
 
   _createClass(App, [{
-    key: 'getAllUserData',
-    value: function getAllUserData() {
-      // console.log('Client: getAllUserData invoked');
-      // axios.get('/users')
-      //   .catch( err => {console.log('Client: getAllUserData Error: ', err ) })
-      //   .then( (response) => {
-      //     console.log('Client: getAllUserData receieved ', response);
-      //     // this.setState({
-      //     //   user1: response[0]
-      //     // })
-      //   } )
+    key: 'getUserData',
+    value: function getUserData(request, slot) {
+      var _this2 = this;
+
+      console.log('Client: getUserData invoked for request:', request);
+      console.log('Client: getUserData invoked for slot:', slot);
+
+      if (slot === 0) {
+        _axios2.default.get('/users', { params: { name: request } }).catch(function (err) {
+          console.log('Client: GetUser Error: ', err);
+          _this2.setState({
+            char1Loaded: false
+          });
+        }).then(function (response) {
+          console.log('Client: GetUser receieved ', response.data[0]);
+          _this2.setState({
+            char1Loaded: true,
+            char1Data: response.data[0]
+            // currentHP: response.data[0].maxhitpoints,
+            // charName: response.data[0].name,
+            // charAtk: response.data[0].attackpower,
+            // charArmor: response.data[0].armor,
+            // charAtkRate: response.data[0].attackrate,
+          });
+        });
+      } else if (slot === 1) {
+        _axios2.default.get('/users', { params: { name: request } }).catch(function (err) {
+          console.log('Client: GetUser Error: ', err);
+          _this2.setState({
+            char2Loaded: false
+          });
+        }).then(function (response) {
+          console.log('Client: GetUser receieved ', response.data[0]);
+          _this2.setState({
+            char2Loaded: true,
+            char2Data: response.data[0]
+            // charName: response.data[0].name,
+            // charAtk: response.data[0].attackpower,
+            // charArmor: response.data[0].armor,
+            // charAtkRate: response.data[0].attackrate,
+          });
+          console.log('Client: char2loaded:', _this2.state.char2Loaded);
+        });
+      }
+    }
+  }, {
+    key: 'resetLoadedState',
+    value: function resetLoadedState(slot) {
+      if (slot === 0) {
+        this.setState({
+          char1Loaded: false,
+          char1Data: null
+        });
+      } else if (slot === 1) {
+        this.setState({
+          char2Loaded: false,
+          char2Data: null
+        });
+      }
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       console.log('Client: mounted.');
-      // this.getAllUserData();
     }
   }, {
     key: 'render',
     value: function render() {
+
+      var char1name = null;
+      var char1hp = null;
+      var char1atkpwr = null;
+      var char1armor = null;
+      var char1atkrate = null;
+
+      if (this.state.char1Data) {
+        char1name = this.state.char1Data.name;
+        char1hp = this.state.char1Data.maxhitpoints;
+        char1atkpwr = this.state.char1Data.attackpower;
+        char1armor = this.state.char1Data.armor;
+        char1atkrate = this.state.char1Data.attackrate;
+      }
+
+      var char2name = null;
+      var char2hp = null;
+      var char2atkpwr = null;
+      var char2armor = null;
+      var char2atkrate = null;
+
+      if (this.state.char2Data) {
+        char2name = this.state.char2Data.name;
+        char2hp = this.state.char2Data.maxhitpoints;
+        char2atkpwr = this.state.char2Data.attackpower;
+        char2armor = this.state.char2Data.armor;
+        char2atkrate = this.state.char2Data.attackrate;
+      }
+
       return _react2.default.createElement(
         'div',
         null,
@@ -10518,19 +10606,37 @@ var App = function (_React$Component) {
         ),
         'Something appeared!',
         _react2.default.createElement('br', null),
-        _react2.default.createElement(
-          'div',
-          null,
-          this.state.user1
-        ),
-        _react2.default.createElement(
-          'div',
-          null,
-          this.state.user2
-        ),
         _react2.default.createElement(_create2.default, null),
-        _react2.default.createElement(_status2.default, { usernum: this.state.users[0] }),
-        _react2.default.createElement(_status2.default, { usernum: this.state.users[1] }),
+        _react2.default.createElement(_status2.default, { usernum: this.state.usernumlist[0],
+          userdataname: char1name,
+
+          userdatahp: char1hp,
+
+          userdataatk: char1atkpwr,
+
+          userdataarmor: char1armor,
+
+          userdataatkrate: char1atkrate,
+
+          getmethod: this.getUserData,
+          resetstatusmethod: this.resetLoadedState,
+          slotnum: this.state.userSlotList[0],
+          loaded: this.state.char1Loaded }),
+        _react2.default.createElement(_status2.default, { usernum: this.state.usernumlist[1],
+          userdataname: char2name,
+
+          userdatahp: char2hp,
+
+          userdataatk: char2atkpwr,
+
+          userdataarmor: char2armor,
+
+          userdataatkrate: char2atkrate,
+
+          getmethod: this.getUserData,
+          resetstatusmethod: this.resetLoadedState,
+          slotnum: this.state.userSlotList[1],
+          loaded: this.state.char2Loaded }),
         _react2.default.createElement(_list2.default, null)
       );
     }
@@ -10540,6 +10646,9 @@ var App = function (_React$Component) {
 }(_react2.default.Component);
 
 ;
+
+exports.default = App;
+
 
 _reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
 
@@ -24217,6 +24326,10 @@ var _axios = __webpack_require__(51);
 
 var _axios2 = _interopRequireDefault(_axios);
 
+var _app = __webpack_require__(90);
+
+var _app2 = _interopRequireDefault(_app);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24235,28 +24348,49 @@ var Status = function (_React$Component) {
 
     _this.state = {
       // slotnumber: this.props.number,
-      charLoadedState: false,
-      failedSearch: false,
-      currentHP: null,
-      charName: null,
-      charAtk: null,
-      charArmor: null,
-      charAtkRate: null,
+      charLoadedState: _this.props.loaded,
+      // charLoadedState: true,
+      // failedSearch: false,
+      currentHP: _this.props.userdatahp,
+      charName: _this.props.userdataname,
+      charAtk: _this.props.userdataatk,
+      charArmor: _this.props.userdataarmor,
+      charAtkRate: _this.props.userdataatkrate,
       nameentrytext: null
 
     };
 
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.handleTextChange = _this.handleTextChange.bind(_this);
-    _this.resetState = _this.resetState.bind(_this);
+    _this.resetStatusState = _this.resetStatusState.bind(_this);
+    _this.componentWillReceiveProps = _this.componentWillReceiveProps.bind(_this);
     return _this;
   }
 
   _createClass(Status, [{
-    key: 'resetState',
-    value: function resetState() {
-      console.log('Status: resetState invoked for: ', this.state.nameentrytext);
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextprops) {
+      console.log('Status: compWillReceiveProps:', nextprops);
+      if (nextprops.slotnum === this.props.slotnum) {
+        this.setState({
+          // slotnumber: this.props.number,
+          charLoadedState: nextprops.loaded,
+          // charLoadedState: true,
+          // failedSearch: false,
+          currentHP: nextprops.userdatahp,
+          charName: nextprops.userdataname,
+          charAtk: nextprops.userdataatk,
+          charArmor: nextprops.userdataarmor,
+          charAtkRate: nextprops.userdataatkrate
+        });
+      }
+    }
+  }, {
+    key: 'resetStatusState',
+    value: function resetStatusState() {
+      console.log('Status: resetStatusState invoked for: ', this.state.nameentrytext);
 
+      this.props.resetstatusmethod(this.props.slotnum);
       this.setState({
         // slotnumber: this.props.number,
         charLoadedState: false,
@@ -24272,26 +24406,27 @@ var Status = function (_React$Component) {
   }, {
     key: 'handleSubmit',
     value: function handleSubmit() {
-      var _this2 = this;
-
       console.log('Status: handleSubmit invoked for: ', this.state.nameentrytext);
+      this.props.getmethod(this.state.nameentrytext, this.props.slotnum);
 
-      _axios2.default.get('/users', { params: { name: this.state.nameentrytext } }).catch(function (err) {
-        console.log('Status: GetUser Error: ', err);
-        _this2.setState({
-          charLoadedState: false
-        });
-      }).then(function (response) {
-        console.log('Status: GetUser receieved ', response.data[0]);
-        _this2.setState({
-          charLoadedState: true,
-          currentHP: response.data[0].maxhitpoints,
-          charName: response.data[0].name,
-          charAtk: response.data[0].attackpower,
-          charArmor: response.data[0].armor,
-          charAtkRate: response.data[0].attackrate
-        });
-      });
+      // axios.get('/users', {params: {name: this.state.nameentrytext}})
+      //   .catch( err => {
+      //     console.log('Status: GetUser Error: ', err );
+      //     this.setState({
+      //       charLoadedState: false
+      //     });
+      //   })
+      //   .then( (response) => {
+      //     console.log('Status: GetUser receieved ', response.data[0]);
+      //     this.setState({
+      //       charLoadedState: true,
+      //       currentHP: response.data[0].maxhitpoints,
+      //       charName: response.data[0].name,
+      //       charAtk: response.data[0].attackpower,
+      //       charArmor: response.data[0].armor,
+      //       charAtkRate: response.data[0].attackrate,
+      //     })
+      //   } )
     }
   }, {
     key: 'handleTextChange',
@@ -24305,7 +24440,9 @@ var Status = function (_React$Component) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      console.log('Status Component mounted for: ', this.props.usernum.name);
+      console.log('Status Component mounted for: ', this.props.usernum);
+      console.log('Status: User Data:', this.props.userdataname);
+      console.log('Status: Loaded State:', this.props.loaded);
     }
   }, {
     key: 'render',
@@ -24317,7 +24454,7 @@ var Status = function (_React$Component) {
           _react2.default.createElement(
             'h2',
             null,
-            this.props.usernum.name
+            this.props.usernum
           ),
           _react2.default.createElement(
             'h3',
@@ -24346,7 +24483,7 @@ var Status = function (_React$Component) {
           ),
           _react2.default.createElement(
             'button',
-            { type: 'button', onClick: this.resetState },
+            { type: 'button', onClick: this.resetStatusState },
             'Go Back'
           )
         );
