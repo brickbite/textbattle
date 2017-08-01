@@ -23219,16 +23219,17 @@ var Create = function (_React$Component) {
 
     };
 
-    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.handleCreateButtonSubmit = _this.handleCreateButtonSubmit.bind(_this);
     _this.handleTextChange = _this.handleTextChange.bind(_this);
     _this.resetState = _this.resetState.bind(_this);
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
     return _this;
   }
 
   _createClass(Create, [{
     key: 'resetState',
     value: function resetState() {
-      console.log('Status: resetState invoked for: ', this.state.nameentrytext);
+      console.log('Status: resetState invoked for: ');
 
       this.setState({
         // slotnumber: this.props.number,
@@ -23249,20 +23250,21 @@ var Create = function (_React$Component) {
 
       console.log('Create: handleSubmit invoked for: ', this.state.nameentrytext);
 
-      _axios2.default.post('/users', { params: { name: this.state.nameentrytext } }).catch(function (err) {
+      _axios2.default.post('/users', {
+        "name": this.state.nameentrytext,
+        "maxhitpoints": Math.max(30, Math.floor(Math.random() * 100)),
+        "attackpower": Math.max(1, Math.floor(Math.random() * 10)),
+        "armor": Math.floor(Math.random() * 2),
+        "attackrate": Math.min(3000, Math.floor(Math.random() * 5000))
+      }).catch(function (err) {
         console.log('Create: createUser Error: ', err);
         _this2.setState({
           failedCreate: true
         });
       }).then(function (response) {
-        console.log('Create: createUser receieved ', response.data[0]);
+        console.log('Create: createUser receieved ', response.data);
         _this2.setState({
-          charLoadedState: true,
-          currentHP: response.data[0].maxhitpoints,
-          charName: response.data[0].name,
-          charAtk: response.data[0].attackpower,
-          charArmor: response.data[0].armor,
-          charAtkRate: response.data[0].attackrate
+          failedCreate: false
         });
       });
     }
@@ -23281,6 +23283,13 @@ var Create = function (_React$Component) {
       console.log('Create Component mounted');
     }
   }, {
+    key: 'handleCreateButtonSubmit',
+    value: function handleCreateButtonSubmit() {
+      this.setState({
+        formLoadedState: true
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       if (this.state.formLoadedState) {
@@ -23288,46 +23297,16 @@ var Create = function (_React$Component) {
           'div',
           null,
           _react2.default.createElement(
-            'form',
-            { action: '/action_page.php', method: 'get' },
-            'First name: ',
-            _react2.default.createElement(
-              'input',
-              { type: 'text', name: 'fname' },
-              ' '
-            ),
-            _react2.default.createElement('br', null),
-            'Last name: ',
-            _react2.default.createElement(
-              'input',
-              { type: 'text', name: 'lname' },
-              ' '
-            ),
-            _react2.default.createElement('br', null),
-            'Last name: ',
-            _react2.default.createElement(
-              'input',
-              { type: 'text', name: 'lname' },
-              ' '
-            ),
-            _react2.default.createElement('br', null),
-            'Last name: ',
-            _react2.default.createElement(
-              'input',
-              { type: 'text', name: 'lname' },
-              ' '
-            ),
-            _react2.default.createElement('br', null),
-            _react2.default.createElement(
-              'input',
-              { type: 'submit', value: 'Submit' },
-              ' '
-            )
-          ),
-          _react2.default.createElement(
             'button',
             { type: 'button', onClick: this.resetState },
             'Go Back'
+          ),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('input', { className: 'nameentry', placeholder: 'Enter a name...', onChange: this.handleTextChange }),
+          _react2.default.createElement(
+            'button',
+            { type: 'button', onClick: this.handleSubmit },
+            'Create'
           )
         );
       } else {
@@ -23336,7 +23315,7 @@ var Create = function (_React$Component) {
           null,
           _react2.default.createElement(
             'button',
-            { type: 'button', onClick: this.handleSubmit },
+            { type: 'button', onClick: this.handleCreateButtonSubmit },
             'Create Character'
           )
         );

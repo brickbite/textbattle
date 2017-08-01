@@ -71,15 +71,9 @@ const searchUser = function(enteredName, cb) {
     });
 }
 
-const insertUser = function(enteredName, cb) {
-  console.log('DB: insertUser: invoked for', enteredName);
-  users.create({
-    name: enteredName,
-    maxhitpoints: 900,
-    attackpower: 14,
-    armor: 2,
-    attackrate: 8000
-  })
+const insertUser = function(enteredChar, cb) {
+  console.log('DB: insertUser: invoked for', enteredChar);
+  users.create(enteredChar)
     .catch(err => { console.log('Error in insertUser:', err); })
     .then((result) => {
       console.log('DB: insert:', result);

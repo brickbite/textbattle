@@ -17,14 +17,15 @@ class Create extends React.Component {
       
     }
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCreateButtonSubmit = this.handleCreateButtonSubmit.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
     this.resetState = this.resetState.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
 
   resetState() {
-    console.log('Status: resetState invoked for: ', this.state.nameentrytext);
+    console.log('Status: resetState invoked for: ');
 
    this.setState({
       // slotnumber: this.props.number,
@@ -43,7 +44,13 @@ class Create extends React.Component {
   handleSubmit() {
     console.log('Create: handleSubmit invoked for: ', this.state.nameentrytext);
 
-    axios.post('/users', {params: {name: this.state.nameentrytext}})
+    axios.post('/users', {
+      "name": this.state.nameentrytext,
+      "maxhitpoints": Math.max(30, Math.floor(Math.random() * 100)),
+      "attackpower": Math.max(1, Math.floor(Math.random() * 10)),
+      "armor": Math.floor(Math.random() * 2),
+      "attackrate": Math.min(3000, Math.floor(Math.random() * 5000))
+    })
       .catch( err => {
         console.log('Create: createUser Error: ', err );
         this.setState({
@@ -51,14 +58,9 @@ class Create extends React.Component {
         });
       })
       .then( (response) => {
-        console.log('Create: createUser receieved ', response.data[0]);
+        console.log('Create: createUser receieved ', response.data);
         this.setState({
-          charLoadedState: true,
-          currentHP: response.data[0].maxhitpoints,
-          charName: response.data[0].name,
-          charAtk: response.data[0].attackpower,
-          charArmor: response.data[0].armor,
-          charAtkRate: response.data[0].attackrate,
+          failedCreate: false
         })
       } )
   }
@@ -75,26 +77,26 @@ class Create extends React.Component {
     console.log('Create Component mounted');
   }
 
-
+  handleCreateButtonSubmit() {
+    this.setState({
+      formLoadedState: true
+    })
+  }
 
   render() {
     if (this.state.formLoadedState) {
       return (
         <div>
-          <form action="/action_page.php" method="get">
-            First name: <input type="text" name="fname"> </input><br></br>
-            Last name: <input type="text" name="lname"> </input><br></br>
-            Last name: <input type="text" name="lname"> </input><br></br>
-            Last name: <input type="text" name="lname"> </input><br></br>
-            <input type="submit" value="Submit"> </input>
-          </form>
           <button type="button" onClick={this.resetState}>Go Back</button>
+          <br></br>
+          <input className="nameentry" placeholder="Enter a name..." onChange={this.handleTextChange}/>
+          <button type="button" onClick={this.handleSubmit}>Create</button>
         </div>
       )
     } else {
       return (
         <div>
-          <button type="button" onClick={this.handleSubmit}>Create Character</button>
+          <button type="button" onClick={this.handleCreateButtonSubmit}>Create Character</button>
         </div>
       )
     }
