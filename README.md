@@ -1,28 +1,25 @@
 # textbattle
 
-User inputs:
+## Features:
+- Create characters (enter a name)
+- Retrieve created characters (by entering name)
+- Battle characters and see the action log
 
-Type in charactername to retreive a character
+## Starting the App:
+1. clone this repo, navigate to the directory, and ```sh npm install ```
+1. use ```sh npm run webpack ``` and ```sh npm start ``` to build the client and start the server. Server will be listening on localhost:3000
+1. database will be seeded with some default characters on server start
 
-select an enemy (or other playername)
+## characterdata:
+- name: string
+- hp: integer
+- exp: integar
+- atk: integer
+- armor: integer
+- shield: integer
+- bounty: integer
 
-seed database with default entries (enemydata)
-
-
-
-characterdata:
-name: string
-hp: integer
-exp: integar
-atk: integer
-armor: integer
-shield: integer
-bounty: integer
-
-
-
-while (battle) {
-  
-
-}
-
+## Tech Stack:
+- React client
+- Node.js server (with Express)
+- sqlite database
