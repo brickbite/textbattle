@@ -103,7 +103,7 @@ class Status extends React.Component {
   render() {
     if (this.state.charLoadedState) {
       return (
-        <div>
+        <div className="charStatus">
           <h2>{this.props.usernum}</h2>
           <h3>{'Name: ' + this.state.charName}</h3>
           <div>{'HP: ' + this.state.currentHP}</div>
@@ -115,7 +115,7 @@ class Status extends React.Component {
       )
     } else {
       return (
-        <div>
+        <div className="charStatus">
           <h2>Enter Name</h2>
           <input className="nameentry" onChange={this.handleTextChange} />
           <button type="button" onClick={this.handleSubmit}>Find Character</button>

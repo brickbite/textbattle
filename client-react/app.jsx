@@ -212,32 +212,32 @@ class App extends React.Component {
         <br></br>
         <Create />
         <Status usernum={this.state.usernumlist[0]} 
-        userdataname={ char1name } 
-        userdatahp={ char1hp } 
-        userdataatk={ char1atkpwr } 
-        userdataarmor={ char1armor } 
-        userdataatkrate={ char1atkrate } 
-        getmethod={this.getUserData} 
-        resetstatusmethod={this.resetLoadedState} 
-        slotnum={this.state.userSlotList[0]} 
-        loaded={this.state.char1Loaded} />
+          userdataname={ char1name } 
+          userdatahp={ char1hp } 
+          userdataatk={ char1atkpwr } 
+          userdataarmor={ char1armor } 
+          userdataatkrate={ char1atkrate } 
+          getmethod={this.getUserData} 
+          resetstatusmethod={this.resetLoadedState} 
+          slotnum={this.state.userSlotList[0]} 
+          loaded={this.state.char1Loaded} />
         <Status usernum={this.state.usernumlist[1]} 
-        userdataname={ char2name } 
-        userdatahp={ char2hp } 
-        userdataatk={ char2atkpwr } 
-        userdataarmor={ char2armor } 
-        userdataatkrate={ char2atkrate } 
-        getmethod={this.getUserData} 
-        resetstatusmethod={this.resetLoadedState} 
-        slotnum={this.state.userSlotList[1]} 
-        loaded={this.state.char2Loaded} />
+          userdataname={ char2name } 
+          userdatahp={ char2hp } 
+          userdataatk={ char2atkpwr } 
+          userdataarmor={ char2armor } 
+          userdataatkrate={ char2atkrate } 
+          getmethod={this.getUserData} 
+          resetstatusmethod={this.resetLoadedState} 
+          slotnum={this.state.userSlotList[1]} 
+          loaded={this.state.char2Loaded} />
         <List ready={this.state.char1Loaded && this.state.char2Loaded} 
-        user1={this.state.char1Data}
-        user2={this.state.char2Data}
-        record={this.state.list}
-        startconflictmethod={this.startConflict}
-        inconflictstate={this.state.inConflict}
-        />
+          user1={this.state.char1Data}
+          user2={this.state.char2Data}
+          record={this.state.list}
+          startconflictmethod={this.startConflict}
+          inconflictstate={this.state.inConflict}
+          />
       </div>
     )
   }
