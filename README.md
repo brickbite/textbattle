@@ -10,7 +10,7 @@
 1. use ```npm run webpack``` and ```npm start``` to build the client and start the server. Server will be listening on localhost:3000
 1. database will be seeded with some default characters on server start
 
-## characterdata:
+## Character Data (for reference):
 - name: string
 - hp: integer
 - exp: integar
@@ -22,4 +22,4 @@
 ## Tech Stack:
 - React client
 - Node.js server (with Express)
-- sqlite database
+- SQLite database (with Sequelize)
