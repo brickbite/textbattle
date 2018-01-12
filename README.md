@@ -6,8 +6,8 @@
 - Battle characters and see the action log
 
 ## Starting the App:
-1. clone this repo, navigate to the directory, and ```sh npm install ```
-1. use ```sh npm run webpack ``` and ```sh npm start ``` to build the client and start the server. Server will be listening on localhost:3000
+1. clone this repo, navigate to the directory, and ```npm install```
+1. use ```npm run webpack``` and ```npm start``` to build the client and start the server. Server will be listening on localhost:3000
 1. database will be seeded with some default characters on server start
 
 ## characterdata:
