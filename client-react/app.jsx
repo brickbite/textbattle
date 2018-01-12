@@ -221,6 +221,7 @@ class App extends React.Component {
           resetstatusmethod={this.resetLoadedState} 
           slotnum={this.state.userSlotList[0]} 
           loaded={this.state.char1Loaded} />
+        <div className="charStatus">--vs--</div>
         <Status usernum={this.state.usernumlist[1]} 
           userdataname={ char2name } 
           userdatahp={ char2hp } 
